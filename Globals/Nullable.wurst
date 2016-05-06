@@ -1,0 +1,14 @@
+package Nullable
+
+class Nullable<T>
+	private T value
+	private bool hasValueBeenSet
+		
+	function getValue() returns T
+		if hasValue()
+			return value
+		else
+			return null
+	
+	function hasValue() returns bool
+		return hasValueBeenSet and value != null

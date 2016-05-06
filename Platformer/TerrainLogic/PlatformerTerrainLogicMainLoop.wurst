@@ -1,0 +1,24 @@
+package PlatformerTerrainLogicMainLoop
+
+import LinkedList
+import PlatformerUnit
+import PlatformerUnitGroup
+import MyPlayer
+
+//filter for if a platformer can move through a terrain type
+public function isTerrainPlatformerPathable(real x, real y) returns bool
+	return isTerrainPlatformerPathable(GetTerrainType(x, y))
+public function isTerrainPlatformerPathable(int terrainID) returns bool
+	return terrainID == OPENSPACE or terrainID == DEATH or terrainID == SUPERBOUNCE or terrainID == SLIPSTREAM or terrainID == SLOWWEB or terrainID == OCEAN or isTerrainPlatformerDiagonalType(terrainID)
+
+//a special subset of pathable terrain types
+public function isTerrainPlatformerDiagonalType(real x, real y) returns bool
+	return isTerrainPlatformerDiagonalType(GetTerrainType(x, y))
+public function isTerrainPlatformerDiagonalType(int terrainID) returns bool
+	return terrainID == FASTICE or terrainID == MEDIUMICE or terrainID == SLOWICE
+
+//filter for if a platformer can't move through a terrain type
+public function isTerrainPlatformerUnpathable(real x, real y) returns bool
+	return isTerrainPlatformerUnpathable(GetTerrainType(x, y))
+public function isTerrainPlatformerUnpathable(int terrainID) returns bool
+	return terrainID == SAFE or terrainID == GRASS or terrainID == D_GRASS or terrainID == SUPERJUMP or terrainID == FASTMOVE

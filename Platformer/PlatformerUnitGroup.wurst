@@ -1,0 +1,36 @@
+package PlatformerUnitGroup
+
+import LinkedList
+
+import PlatformerPhysicsLoop
+import PlatformerGlobals
+
+import initlater PlatformerUnit
+
+
+LinkedList<PlatformerUnit> platformingUnits
+
+public function getPlatformingUnits() returns LinkedList<PlatformerUnit>
+	return platformingUnits
+	
+public function addPlatformer(PlatformerUnit platformer)
+	if not platformingUnits.contains(platformer)
+		if platformingUnits.getSize() == 0
+			physicsLoopTimer.startPeriodic(PHYSICS_LOOP_TIMER_INTERVAL, () -> PhysicsLoop())
+		platformingUnits.add(platformer)
+		
+public function removePlatformer(int pID)
+	var iter = platformingUnits.iterator()
+	
+	for platformingUnit from iter
+		if platformingUnit.pID == pID
+			removePlatformer(platformingUnit)
+	iter.close()
+	
+public function removePlatformer(PlatformerUnit platformer)
+	platformingUnits.remove(platformer)
+	if platformingUnits.getSize() == 0
+		physicsLoopTimer.pause()
+
+init
+	platformingUnits = new LinkedList<PlatformerUnit>()

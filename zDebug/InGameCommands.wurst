@@ -1,0 +1,65 @@
+package InGameCommands
+import PlayerGlobals
+import MyPlayer
+import PlayerGameStateEnum
+import PlatformerDiagonalEnum
+import PlatformerUnit
+
+trigger chatEvent
+
+timer checkingDiagonalTimer
+bool checkingDiagonals
+PlatformerDiagonal onDiagonal
+
+public function onChatEvent(player p)
+	string message = GetEventPlayerChatString()
+	MyPlayer myPlayer = getPlayer(p.getId())
+	
+	if isCommand(message)
+		string command = getCommandName(message)
+		
+		switch command
+			case "pState"
+				print (myPlayer.state.toString())
+			case "plat"
+				myPlayer.transitionToPlatforming()
+			case "checkDiag"
+				if checkingDiagonals
+					checkingDiagonalTimer.pause()
+					checkingDiagonals = false
+				else
+					checkingDiagonalTimer.startPeriodic(.05, () -> onCheckDiagonals())
+					checkingDiagonals = true
+			default
+				print("invalid command name")
+
+public function isCommand(string message) returns bool
+	return message != null and message.length() > 0 and message.charAt(0) == "-"			
+
+public function getCommandName(string message) returns string
+	if message.indexOf(" ") == -1
+		return message.substring(1, message.length())
+	else
+		return message.substring(1, message.indexOf(" "))
+	
+public function getCommandParameters(string message) returns real
+	return 0
+
+public function onCheckDiagonals()
+	MyPlayer myPlayer = getPlayer(0)
+	PlatformerDiagonal nextDiag = isPointWithinDiagonalTerrainType(myPlayer.platformer.platformer.getX(), myPlayer.platformer.platformer.getY())
+	if nextDiag != onDiagonal
+		onDiagonal = nextDiag
+		print(onDiagonal.toString())
+
+
+init
+	chatEvent = CreateTrigger()
+	chatEvent.addAction(() -> onChatEvent(GetTriggerPlayer()))
+	
+	checkingDiagonals = false
+	checkingDiagonalTimer = CreateTimer()
+	
+	for int pID = 0 to NUMBER_PLAYERS
+		if GetPlayerSlotState(Player(pID)) == PLAYER_SLOT_STATE_PLAYING
+			TriggerRegisterPlayerChatEvent(chatEvent, Player(pID), "", false)

@@ -1,0 +1,36 @@
+package MazerUnit
+import MazerGlobals
+import MyPlayer
+
+public class MazerUnit
+	unit mazer
+	int pID
+	MyPlayer myPlayer
+	
+	int onTerrainID
+	int lastTerrainID
+	
+	construct(int pID, real x, real y)
+		this.pID = pID
+		mazer = CreateUnit(Player(pID), MAZER_UNIT_ID, x, y, 0)
+		
+		onTerrainID = GetTerrainType(x, y)
+		lastTerrainID = onTerrainID
+	
+	construct(int pID, unit u)
+		this.pID = pID
+		mazer = u
+		onTerrainID = GetTerrainType(u.getX(), u.getY())
+		lastTerrainID = onTerrainID
+		
+	construct(int pID, MyPlayer myPlayer)
+		this.pID = pID
+		this.myPlayer = myPlayer
+		
+	function hideAndStore()
+		mazer.setXY(MAZER_SAFE_X, MAZER_SAFE_Y)
+		mazer.hide()
+		
+	function unhideAndReturn(real x, real y)
+		mazer.setXY(x, y)
+		mazer.show()

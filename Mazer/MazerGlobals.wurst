@@ -1,0 +1,5 @@
+package MazerGlobals
+
+public constant int MAZER_UNIT_ID = 'a000'
+public constant real MAZER_SAFE_X = 0
+public constant real MAZER_SAFE_Y = 0

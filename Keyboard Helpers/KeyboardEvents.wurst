@@ -1,0 +1,147 @@
+package KeyboardEvents
+
+import Table
+import PlayerGlobals
+import LinkedList
+
+import initlater MyPlayer
+import initlater PlatformerUnit
+
+LinkedList<PlayerKeyboardState> playerKeyboardStates
+
+public function getPlayerKeyboardState(int pID) returns PlayerKeyboardState
+	var iter = playerKeyboardStates.iterator()
+	
+	while iter.hasNext()
+		var state = iter.next()
+		if state.pID == pID
+			return state
+	iter.close()
+	
+	return null
+
+public class PlayerKeyboardState
+	int pID
+	MyPlayer myPlayer
+	
+	bool isLeftPressed
+	bool isRightPressed
+	int horizontalAxisState
+	int quickPressBuffer
+	
+	bool isUpPressed
+	bool isDownPressed
+	
+	trigger onLeftPress
+	trigger onLeftRelease
+	
+	trigger onRightPress
+	trigger onRightRelease
+	
+	trigger onUpPress
+	trigger onUpRelease
+	
+	trigger onDownPress
+	trigger onDownRelease
+	
+	construct(int pID)
+		if getPlayerKeyboardState(pID) == null
+			this.pID = pID
+			this.myPlayer = getPlayer(pID)
+			
+			isLeftPressed = false
+			isRightPressed = false
+			isUpPressed = false
+			isDownPressed = false
+			
+			horizontalAxisState = 0
+			quickPressBuffer = 0
+			
+			onLeftPress = CreateTrigger()
+			onLeftPress.registerPlayerEvent(Player(pID), EVENT_PLAYER_ARROW_LEFT_DOWN)
+			onLeftRelease = CreateTrigger()
+			onLeftRelease.registerPlayerEvent(Player(pID), EVENT_PLAYER_ARROW_LEFT_UP)
+			
+			onRightPress = CreateTrigger()
+			onRightPress.registerPlayerEvent(Player(pID), EVENT_PLAYER_ARROW_RIGHT_DOWN)
+			onRightRelease = CreateTrigger()
+			onRightRelease.registerPlayerEvent(Player(pID), EVENT_PLAYER_ARROW_RIGHT_UP)
+			
+			onUpPress = CreateTrigger()
+			onUpPress.addAction(() -> onUpPress(GetTriggerPlayer().getId()))
+			onUpPress.registerPlayerEvent(Player(pID), EVENT_PLAYER_ARROW_UP_DOWN)
+			onUpRelease = CreateTrigger()
+			onUpRelease.addAction(() -> onUpRelease(GetTriggerPlayer().getId()))
+			onUpRelease.registerPlayerEvent(Player(pID), EVENT_PLAYER_ARROW_UP_UP)
+			
+			onDownPress = CreateTrigger()
+			onDownPress.addAction(() -> onDownPress(GetTriggerPlayer().getId()))
+			onDownPress.registerPlayerEvent(Player(pID), EVENT_PLAYER_ARROW_DOWN_DOWN)
+			onDownRelease = CreateTrigger()
+			onDownRelease.addAction(() -> onDownRelease(GetTriggerPlayer().getId()))
+			onDownRelease.registerPlayerEvent(Player(pID), EVENT_PLAYER_ARROW_DOWN_UP)
+			
+			playerKeyboardStates.add(this)
+		
+	
+	construct(int pID, MyPlayer myPlayer)
+		if getPlayerKeyboardState(pID) == null
+			this.pID = pID
+			this.myPlayer = myPlayer
+			
+			isLeftPressed = false
+			isRightPressed = false
+			isUpPressed = false
+			isDownPressed = false
+			
+			horizontalAxisState = 0
+			quickPressBuffer = 0
+			
+			onLeftPress = CreateTrigger()
+			onLeftPress.registerPlayerEvent(Player(pID), EVENT_PLAYER_ARROW_LEFT_DOWN)
+			onLeftRelease = CreateTrigger()
+			onLeftRelease.registerPlayerEvent(Player(pID), EVENT_PLAYER_ARROW_LEFT_UP)
+			
+			onRightPress = CreateTrigger()
+			onRightPress.registerPlayerEvent(Player(pID), EVENT_PLAYER_ARROW_RIGHT_DOWN)
+			onRightRelease = CreateTrigger()
+			onRightRelease.registerPlayerEvent(Player(pID), EVENT_PLAYER_ARROW_RIGHT_UP)
+			
+			onUpPress = CreateTrigger()
+			onUpPress.addAction(() -> onUpPress(GetTriggerPlayer().getId()))
+			onUpPress.registerPlayerEvent(Player(pID), EVENT_PLAYER_ARROW_UP_DOWN)
+			onUpRelease = CreateTrigger()
+			onUpRelease.addAction(() -> onUpRelease(GetTriggerPlayer().getId()))
+			onUpRelease.registerPlayerEvent(Player(pID), EVENT_PLAYER_ARROW_UP_UP)
+			
+			onDownPress = CreateTrigger()
+			onDownPress.addAction(() -> onDownPress(GetTriggerPlayer().getId()))
+			onDownPress.registerPlayerEvent(Player(pID), EVENT_PLAYER_ARROW_DOWN_DOWN)
+			onDownRelease = CreateTrigger()
+			onDownRelease.addAction(() -> onDownRelease(GetTriggerPlayer().getId()))
+			onDownRelease.registerPlayerEvent(Player(pID), EVENT_PLAYER_ARROW_DOWN_UP)
+			
+			playerKeyboardStates.add(this)
+	
+	static function onUpPress(int pID)
+		PlayerKeyboardState state = getPlayerKeyboardState(pID)
+		
+		state.isUpPressed = true
+		
+	static function onUpRelease(int pID)
+		PlayerKeyboardState state = getPlayerKeyboardState(pID)
+		
+		state.isUpPressed = false
+	
+	static function onDownPress(int pID)
+		PlayerKeyboardState state = getPlayerKeyboardState(pID)
+		
+		state.isDownPressed = true
+		
+	static function onDownRelease(int pID)
+		PlayerKeyboardState state = getPlayerKeyboardState(pID)
+		
+		state.isDownPressed = false
+		
+init
+	playerKeyboardStates = new LinkedList<PlayerKeyboardState>()

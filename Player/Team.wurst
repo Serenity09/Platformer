@@ -1,0 +1,7 @@
+package Team
+
+import MyPlayer
+import LinkedList
+
+public class Team
+	LinkedList<MyPlayer> players

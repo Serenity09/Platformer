@@ -1,0 +1,126 @@
+package PlatformerUnit
+
+import Unit
+import Vectors
+import PlatformerGlobals
+import initlater PlatformerGameStateEnum
+import initlater PlatformerDiagonalEnum
+import PlatformerPhysicsLoop
+import PlatformerUnitGroup
+import MyPlayer
+import PlayerGameStateEnum
+
+
+constant real SAFE_X = 0.00
+constant real SAFE_Y = 0.00
+
+public class PlatformerUnit
+	unit platformer
+	int 		pID
+	MyPlayer	myPlayer
+	camerasetup	camera
+	
+	vec3		position
+	vec3		velocity
+	vec3		acceleration		//is a function of the timer timestep
+	int			currentTerrainID
+	int			lastTerrainID
+	int			pushedAgainstTerrainID
+	
+	real		terminalSpeed
+	vec2		gravityAcceleration
+	real		verticalJumpSpeed
+	real		horizontalJumpSpeed
+	real		v2hJumpRatio
+	
+	bool		applyDiagonals
+	PlatformerDiagonal	onDiagonal
+	
+	
+	
+	
+	
+	function GravityDirection() returns int
+		if gravityAcceleration.x == 0
+			if gravityAcceleration.y > 0
+				return 1
+			else if gravityAcceleration.y < 0
+				return -1
+			else
+				return 0
+		else
+			return 0
+	
+	function StartPlatforming(real x, real y)
+		if not myPlayer.state == PlayerGameState.PLATFORMING			
+			//apply current terrain effect
+			
+			//apply default values
+			ApplyValuesForGameState(PlatformerGameState.DEFAULT)
+			
+			platformer.setX(x)
+			platformer.setY(y)
+			platformer.show()
+			
+			//start platforming camera
+			if GetLocalPlayer() == Player(pID)
+				CameraSetupApply(camera, false, false)
+				SetCameraTargetController(platformer, 0, 0, false)
+			
+			//add self to platforming loop list
+			addPlatformer(this)
+			
+			
+		else
+			//do nothing
+
+		
+	function StopPlatforming()
+		if myPlayer.state == PlayerGameState.PLATFORMING
+			//remove current terrain effect
+			
+			removePlatformer(this)
+			
+			platformer.setX(SAFE_X)
+			platformer.setY(SAFE_Y)
+			platformer.hide()
+			
+			
+		else
+			//do nothing
+	
+	function ApplyValuesForGameState(PlatformerGameState gameState)
+		//apply values regardless of game state
+		var x = platformer.getX()
+		var y = platformer.getY()
+		position = vec3(platformer.getX(), platformer.getY(), 0)
+		velocity = vec3(0, 0, 0)
+		acceleration = vec3(0, 0, 0)
+		onDiagonal = PlatformerDiagonal.NONE
+		
+		switch (gameState)
+		
+			case PlatformerGameState.DEFAULT
+			default
+				terminalSpeed = TERMINAL_SPEED * PHYSICS_LOOP_TIMER_INTERVAL
+				gravityAcceleration = vec2(0, GRAVITY_ACCELERATION * PHYSICS_LOOP_TIMER_INTERVAL)
+				verticalJumpSpeed = VERTICAL_JUMP_SPEED * PHYSICS_LOOP_TIMER_INTERVAL
+				horizontalJumpSpeed = HORIZONTAL_JUMP_SPEED * PHYSICS_LOOP_TIMER_INTERVAL
+				v2hJumpRatio = V2H_JUMP_RATIO * PHYSICS_LOOP_TIMER_INTERVAL
+				
+	construct(int pID, MyPlayer myPlayer)
+		this.pID = pID
+		this.myPlayer = myPlayer
+		
+		this.platformer = CreateUnit(Player(pID), 'e000', SAFE_X, SAFE_Y, 0)
+		//print("platformer unit type ID: " + PLATFORMING_UNIT_ID.toString())
+		//print(('e000' == PLATFORMING_UNIT_ID).toString())
+		//print("created platformer: " + this.platformer.getHandleId().toString())
+		//this.platformer.addAbility('Aloc')
+		this.platformer.hide()
+		
+		this.camera = CreateCameraSetup()
+		CameraSetupSetField(this.camera, CAMERA_FIELD_ANGLE_OF_ATTACK, 270, 0)
+		CameraSetupSetField(this.camera, CAMERA_FIELD_TARGET_DISTANCE, 2200, 0)
+				
+endpackage

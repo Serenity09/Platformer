@@ -1,0 +1,34 @@
+package PlayerGameStateEnum
+
+public enum PlayerGameState
+	GAME_PRELOADING
+	GAME_START
+	SELECTING_MODES
+	FINISHED_MODES
+	MAZING
+	PLATFORMING
+	
+	TRANSITIONING_TO_MINIGAME
+	MINIGAME
+	TRANSITIONING_FROM_MINIGAME
+	
+public function PlayerGameState.toString() returns string
+	switch (this)
+		case PlayerGameState.GAME_START
+			return "Game Start"
+		case PlayerGameState.GAME_PRELOADING
+			return "Game Preloading"
+		case PlayerGameState.MAZING
+			return "Mazing"
+		case PlayerGameState.TRANSITIONING_TO_MINIGAME
+			return "Transitioning To Minigame"
+		case PlayerGameState.TRANSITIONING_FROM_MINIGAME
+			return "Transitioning From Minigame"
+		case PlayerGameState.PLATFORMING
+			return "Platforming"
+		case PlayerGameState.SELECTING_MODES
+			return "Selecting Modes"
+		case PlayerGameState.FINISHED_MODES
+			return "Finished Modes"
+		default
+			return "N/A"

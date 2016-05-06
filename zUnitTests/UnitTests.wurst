@@ -1,0 +1,19 @@
+package UnitTests
+import Wurstunit
+import InGameCommands
+
+@test public function testIsCommand()
+	assertTrue(isCommand("-abc"))
+	assertTrue(isCommand("-abc -a - a"))
+	assertTrue(isCommand("-abc"))
+	assertTrue(isCommand("-"))
+	assertTrue(isCommand("-123bc"))
+	assertTrue(not isCommand(""))
+	assertTrue(not isCommand("ab-as"))
+	assertTrue(not isCommand("a-"))
+	assertTrue(not isCommand(" -"))
+	
+@test public function testGetCommandName()
+	"abc".assertEquals(getCommandName("-abc"))
+	"hereWeGo".assertEquals(getCommandName("-hereWeGo"))
+	

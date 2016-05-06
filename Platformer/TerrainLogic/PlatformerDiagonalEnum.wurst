@@ -1,0 +1,161 @@
+package PlatformerDiagonalEnum
+import TerrainHelpers
+import PlatformerTerrainLogicMainLoop
+
+public enum PlatformerDiagonal
+	NONE
+	LEFT
+	RIGHT
+	TOP
+	BOTTOM
+	NORTH_EAST
+	SOUTH_EAST
+	SOUTH_WEST
+	NORTH_WEST
+
+public function isPointWithinDiagonalTerrainType(real x, real y) returns PlatformerDiagonal
+	int terrainCenterX
+	int terrainCenterY
+
+	//get the center coordinates for the tile containing (x,y)
+	if x >= 0
+		terrainCenterX = R2I(x / 128 + .50000) * 128
+	else
+		terrainCenterX = R2I(x / 128 - .50000) * 128
+	
+	if y >= 0
+		terrainCenterY = R2I(y / 128 + .50000) * 128
+	else
+		terrainCenterY = R2I(y / 128 - .50000) * 128
+
+	if isTerrainPlatformerDiagonalType(GetTerrainType(x, y))
+		//step 1: figure out which diagonals we might need to check
+		//step 2: figure out which of those actually exist based on what terrain is adjacent
+		//step 3: see if (x,y) is within any of those diagonals
+		//step 4: return the diagonal ID (x,y) is within (or PlatformerDiagonal.NONE)
+		
+		if x >= terrainCenterX
+			//either way we are going to check the terrain directly right to see if it's pathable
+			if isTerrainPlatformerPathable(GetTerrainType(x + 64, y))
+				if y >= terrainCenterY
+					if isTerrainPlatformerPathable(GetTerrainType(x, y + 64))
+						if isTerrainPlatformerDiagonalType(GetTerrainType(x + 64, y + 64))
+							//debug call DisplayTextToForce(bj_FORCE_PLAYER[0], "between, y: " + R2S(y - terrainCenterY) + " x: " + R2S(x - terrainCenterX))
+							if y - terrainCenterY >= x - terrainCenterX //which side of the diagonal the point is on simplifies to this when diagonal passes through terrainCenter
+								return PlatformerDiagonal.NORTH_WEST //extends from NW corner
+							else
+								return PlatformerDiagonal.SOUTH_EAST //extends from SE corner
+						else //type for (right, below) irrelevant
+							//debug call DisplayTextToForce(bj_FORCE_PLAYER[0], "y: " + R2S(y - terrainCenterY - 64) + " x: " + R2S(x - terrainCenterX)) 
+							if y - terrainCenterY - 64 <= -1 * (x - terrainCenterX)		//check if within NE corner
+								return PlatformerDiagonal.NORTH_EAST //point is in/extends from NE corner
+					else
+						return PlatformerDiagonal.RIGHT //vertical wall
+				else //y < terrainCenterY
+					//debug call DisplayTextToForce(bj_FORCE_PLAYER[0], "south east")
+					if isTerrainPlatformerPathable(GetTerrainType(x, y - 64))
+						if isTerrainPlatformerDiagonalType(GetTerrainType(x + 64, y - 64))
+							//debug call DisplayTextToForce(bj_FORCE_PLAYER[0], "between, y: " + R2S(y - terrainCenterY) + " x: " + R2S(-1 * (x - terrainCenterX)))
+							if y - terrainCenterY >= -1 * (x - terrainCenterX) //which side of the diagonal the point is on simplifies to this when diagonal passes through terrainCenter
+								return PlatformerDiagonal.NORTH_EAST //extends from NE corner
+							else
+								return PlatformerDiagonal.SOUTH_WEST //extends from SW corner
+						else //type for (right, below) irrelevant
+							//debug call DisplayTextToForce(bj_FORCE_PLAYER[0], "y: " + R2S(y - terrainCenterY + 64) + " x: " + R2S(x - terrainCenterX)) 
+							if y - terrainCenterY + 64 >= x - terrainCenterX  //check if within E corner
+								return PlatformerDiagonal.SOUTH_EAST //point is in/extends from SE corner
+					else
+						print ("ID 2")
+						return PlatformerDiagonal.RIGHT //vertical diagonal
+			else
+				print("ID -1")
+				return PlatformerDiagonal.TOP //horizontal diagonal
+		else //x < terrainCenterX
+			//either way we are going to check the terrain directly left to see if it's pathable
+			if isTerrainPlatformerPathable(GetTerrainType(x - 64, y))
+				if y >= terrainCenterY
+					if isTerrainPlatformerPathable(GetTerrainType(x, y + 64))
+						if isTerrainPlatformerDiagonalType(GetTerrainType(x - 64, y + 64))
+							//debug call DisplayTextToForce(bj_FORCE_PLAYER[0], "between, y: " + R2S(y - terrainCenterY) + " x: " + R2S(x - terrainCenterX))
+							if y - terrainCenterY >= -1 * (x - terrainCenterX) //which side of the diagonal the point is on simplifies to this when diagonal passes through terrainCenter
+								return PlatformerDiagonal.NORTH_EAST //extends from NE corner
+							else
+								return PlatformerDiagonal.SOUTH_WEST //extends from SW corner
+						else //type for (left, below) irrelevant
+							//debug call DisplayTextToForce(bj_FORCE_PLAYER[0], "y: " + R2S(y - terrainCenterY) + " x: " + R2S(x - terrainCenterX + 64)) 
+							if y - terrainCenterY <= x - terrainCenterX + 64  //check if within NE corner
+								return PlatformerDiagonal.NORTH_WEST //point is in/extends from NW corner
+					else
+						print ("ID 3")
+						return PlatformerDiagonal.LEFT //vertical wall
+				else //y < terrainCenterY
+					if isTerrainPlatformerPathable(GetTerrainType(x, y - 64))
+						if isTerrainPlatformerDiagonalType(GetTerrainType(x - 64, y - 64))
+							//debug call DisplayTextToForce(bj_FORCE_PLAYER[0], "between, y: " + R2S(y - terrainCenterY) + " x: " + R2S(x - terrainCenterX))
+							if y - terrainCenterY >= x - terrainCenterX //which side of the diagonal the point is on simplifies to this when diagonal passes through terrainCenter
+								return PlatformerDiagonal.NORTH_WEST //extends from NW corner
+							else
+								return PlatformerDiagonal.SOUTH_EAST //extends from SE corner
+						else //type for (right, below) irrelevant
+							//debug call DisplayTextToForce(bj_FORCE_PLAYER[0], "y: " + R2S(y - terrainCenterY) + " x: " + R2S(x - terrainCenterX + 64)) 
+							if y - terrainCenterY >= -1 * (x - terrainCenterX + 64) //check if within NE corner
+								return PlatformerDiagonal.SOUTH_WEST //point is in/extends from SW corner
+					else
+						print ("ID 4")
+						return PlatformerDiagonal.LEFT //vertical wall
+			else
+				print ("ID -2")
+				return PlatformerDiagonal.TOP //horizontal wall
+	//check if (x,y) is even pathable (we should be there at all) and then check to see if adjoining tiles are diagonal and we overlap
+	else if isTerrainPlatformerPathable(GetTerrainType(x, y))
+		//step 1: figure out which diagonal we need to check
+		//step 2: see if diagonal exists
+		//step 3: see if point within diagonal and return ID (only 1 possible)
+		
+		if x >= terrainCenterX and y >= terrainCenterY
+			//debug call DisplayTextToForce(bj_FORCE_PLAYER[0], "3, y: " + R2S(y - terrainCenterY - 64) + " x: " + R2S(x - terrainCenterX)) 
+			//checking for diagonal ID 3
+			if isTerrainPlatformerDiagonalType(GetTerrainType(x, y + 64)) and isTerrainPlatformerDiagonalType(GetTerrainType(x + 64, y)) and isTerrainPlatformerPathable(GetTerrainType(x + 64, y + 64)) and ((y - terrainCenterY - 64) >= -1 * (x - terrainCenterX))
+				return PlatformerDiagonal.SOUTH_WEST
+		else if x < terrainCenterX and y < terrainCenterY
+			//checking for diagonal ID 1
+			//debug call DisplayTextToForce(bj_FORCE_PLAYER[0], "1, y: " + R2S(y - terrainCenterY) + " x: " + R2S(x - terrainCenterX + 64)) 
+			if isTerrainPlatformerDiagonalType(GetTerrainType(x, y - 64)) and isTerrainPlatformerDiagonalType(GetTerrainType(x - 64, y)) and isTerrainPlatformerPathable(GetTerrainType(x - 64, y - 64)) and ((y - terrainCenterY) <= -1 * (x - terrainCenterX - 64))
+				return PlatformerDiagonal.NORTH_EAST
+		else if x >= terrainCenterX //y < terrainCenterY
+			//checking for diagonal ID 4
+			//debug call DisplayTextToForce(bj_FORCE_PLAYER[0], "4, y: " + R2S(y - terrainCenterY + 64) + " x: " + R2S(x - terrainCenterX)) 
+			if isTerrainPlatformerDiagonalType(GetTerrainType(x, y - 64)) and isTerrainPlatformerDiagonalType(GetTerrainType(x + 64, y)) and isTerrainPlatformerPathable(GetTerrainType(x + 64, y - 64)) and ((y - terrainCenterY + 64) <= (x - terrainCenterX))
+				return PlatformerDiagonal.NORTH_WEST
+		else //x < terrainCenterX and y >= terrainCenterY
+			//checking for diagonal ID 2
+			//debug call DisplayTextToForce(bj_FORCE_PLAYER[0], "4, y: " + R2S(y - terrainCenterY) + " x: " + R2S(x - terrainCenterX + 64)) 
+			if isTerrainPlatformerDiagonalType(GetTerrainType(x, y + 64)) and isTerrainPlatformerDiagonalType(GetTerrainType(x - 64, y)) and isTerrainPlatformerPathable(GetTerrainType(x - 64, y + 64)) and ((y - terrainCenterY) >= (x - terrainCenterX + 64))
+				return PlatformerDiagonal.SOUTH_EAST
+
+	//0: no diagonal
+	return PlatformerDiagonal.NONE
+	
+public function PlatformerDiagonal.toString() returns string
+	switch this
+		case PlatformerDiagonal.NONE
+			return "None"
+		case PlatformerDiagonal.BOTTOM
+			return "Bottom"
+		case PlatformerDiagonal.TOP
+			return "Top"
+		case PlatformerDiagonal.LEFT
+			return "Left"
+		case PlatformerDiagonal.RIGHT
+			return "Right"
+		case PlatformerDiagonal.NORTH_EAST
+			return "NE"
+		case PlatformerDiagonal.SOUTH_EAST
+			return "SE"
+		case PlatformerDiagonal.SOUTH_WEST
+			return "SW"
+		case PlatformerDiagonal.NORTH_WEST
+			return "NW"
+		default
+			return "N/A"
+endpackage

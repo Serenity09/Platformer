@@ -1,0 +1,138 @@
+// this script was compiled with wurst 1.5.0.0-jenkins-Wurst-157
+globals
+endglobals
+function CreatePlayerBuildings takes nothing returns nothing
+endfunction
+
+function CreateUnitsForPlayer7 takes nothing returns nothing
+	local player p = Player(7)
+	call CreateUnit(p, 1697656881,  - 1031.5,  - 243.1, 140.563)
+	call CreateUnit(p, 1697656880,  - 915.1,  - 233.8, 270.217)
+	set p = null
+endfunction
+
+function CreateAllUnits takes nothing returns nothing
+	call CreatePlayerBuildings()
+	call CreateUnitsForPlayer7()
+endfunction
+
+function InitCustomTriggers takes nothing returns nothing
+endfunction
+
+function InitGlobals takes nothing returns nothing
+endfunction
+
+function initGlobals takes nothing returns nothing
+endfunction
+
+function main takes nothing returns nothing
+	call initGlobals()
+	call SetCameraBounds(( - 3328.0) + GetCameraMargin(CAMERA_MARGIN_LEFT), ( - 3584.0) + GetCameraMargin(CAMERA_MARGIN_BOTTOM), 3328.0 - GetCameraMargin(CAMERA_MARGIN_RIGHT), 3072.0 - GetCameraMargin(CAMERA_MARGIN_TOP), ( - 3328.0) + GetCameraMargin(CAMERA_MARGIN_LEFT), 3072.0 - GetCameraMargin(CAMERA_MARGIN_TOP), 3328.0 - GetCameraMargin(CAMERA_MARGIN_RIGHT), ( - 3584.0) + GetCameraMargin(CAMERA_MARGIN_BOTTOM))
+	call SetDayNightModels("Environment\\DNC\\DNCDungeon\\DNCDungeonTerrain\\DNCDungeonTerrain.mdl", "Environment\\DNC\\DNCDungeon\\DNCDungeonUnit\\DNCDungeonUnit.mdl")
+	call NewSoundEnvironment("Default")
+	call SetAmbientDaySound("DungeonDay")
+	call SetAmbientNightSound("DungeonNight")
+	call SetMapMusic("Music", true, 0)
+	call CreateAllUnits()
+	call InitBlizzard()
+	call InitGlobals()
+	call InitCustomTriggers()
+endfunction
+
+function InitAllyPriorities takes nothing returns nothing
+	call SetStartLocPrioCount(0, 1)
+	call SetStartLocPrio(0, 0, 6, MAP_LOC_PRIO_HIGH)
+	call SetStartLocPrioCount(1, 3)
+	call SetStartLocPrio(1, 0, 2, MAP_LOC_PRIO_LOW)
+	call SetStartLocPrio(1, 1, 5, MAP_LOC_PRIO_HIGH)
+	call SetStartLocPrio(1, 2, 7, MAP_LOC_PRIO_LOW)
+	call SetStartLocPrioCount(2, 1)
+	call SetStartLocPrio(2, 0, 5, MAP_LOC_PRIO_HIGH)
+	call SetStartLocPrioCount(3, 2)
+	call SetStartLocPrio(3, 0, 0, MAP_LOC_PRIO_LOW)
+	call SetStartLocPrio(3, 1, 6, MAP_LOC_PRIO_HIGH)
+	call SetStartLocPrioCount(4, 3)
+	call SetStartLocPrio(4, 0, 2, MAP_LOC_PRIO_LOW)
+	call SetStartLocPrio(4, 1, 5, MAP_LOC_PRIO_LOW)
+	call SetStartLocPrio(4, 2, 7, MAP_LOC_PRIO_HIGH)
+	call SetStartLocPrioCount(5, 2)
+	call SetStartLocPrio(5, 0, 2, MAP_LOC_PRIO_HIGH)
+	call SetStartLocPrio(5, 1, 7, MAP_LOC_PRIO_LOW)
+	call SetStartLocPrioCount(6, 2)
+	call SetStartLocPrio(6, 0, 0, MAP_LOC_PRIO_HIGH)
+	call SetStartLocPrio(6, 1, 3, MAP_LOC_PRIO_HIGH)
+	call SetStartLocPrioCount(7, 2)
+	call SetStartLocPrio(7, 0, 4, MAP_LOC_PRIO_LOW)
+	call SetStartLocPrio(7, 1, 5, MAP_LOC_PRIO_HIGH)
+endfunction
+
+function InitCustomPlayerSlots takes nothing returns nothing
+	call SetPlayerStartLocation(Player(0), 0)
+	call SetPlayerColor(Player(0), ConvertPlayerColor(0))
+	call SetPlayerRacePreference(Player(0), RACE_PREF_HUMAN)
+	call SetPlayerRaceSelectable(Player(0), true)
+	call SetPlayerController(Player(0), MAP_CONTROL_USER)
+	call SetPlayerStartLocation(Player(1), 1)
+	call SetPlayerColor(Player(1), ConvertPlayerColor(1))
+	call SetPlayerRacePreference(Player(1), RACE_PREF_ORC)
+	call SetPlayerRaceSelectable(Player(1), true)
+	call SetPlayerController(Player(1), MAP_CONTROL_USER)
+	call SetPlayerStartLocation(Player(2), 2)
+	call SetPlayerColor(Player(2), ConvertPlayerColor(2))
+	call SetPlayerRacePreference(Player(2), RACE_PREF_UNDEAD)
+	call SetPlayerRaceSelectable(Player(2), true)
+	call SetPlayerController(Player(2), MAP_CONTROL_USER)
+	call SetPlayerStartLocation(Player(3), 3)
+	call SetPlayerColor(Player(3), ConvertPlayerColor(3))
+	call SetPlayerRacePreference(Player(3), RACE_PREF_NIGHTELF)
+	call SetPlayerRaceSelectable(Player(3), true)
+	call SetPlayerController(Player(3), MAP_CONTROL_USER)
+	call SetPlayerStartLocation(Player(4), 4)
+	call SetPlayerColor(Player(4), ConvertPlayerColor(4))
+	call SetPlayerRacePreference(Player(4), RACE_PREF_HUMAN)
+	call SetPlayerRaceSelectable(Player(4), true)
+	call SetPlayerController(Player(4), MAP_CONTROL_USER)
+	call SetPlayerStartLocation(Player(5), 5)
+	call SetPlayerColor(Player(5), ConvertPlayerColor(5))
+	call SetPlayerRacePreference(Player(5), RACE_PREF_ORC)
+	call SetPlayerRaceSelectable(Player(5), true)
+	call SetPlayerController(Player(5), MAP_CONTROL_USER)
+	call SetPlayerStartLocation(Player(6), 6)
+	call SetPlayerColor(Player(6), ConvertPlayerColor(6))
+	call SetPlayerRacePreference(Player(6), RACE_PREF_UNDEAD)
+	call SetPlayerRaceSelectable(Player(6), true)
+	call SetPlayerController(Player(6), MAP_CONTROL_USER)
+	call SetPlayerStartLocation(Player(7), 7)
+	call SetPlayerColor(Player(7), ConvertPlayerColor(7))
+	call SetPlayerRacePreference(Player(7), RACE_PREF_NIGHTELF)
+	call SetPlayerRaceSelectable(Player(7), true)
+	call SetPlayerController(Player(7), MAP_CONTROL_USER)
+endfunction
+
+function config takes nothing returns nothing
+	call SetMapName("Just another Warcraft III map")
+	call SetMapDescription("Nondescript")
+	call SetPlayers(8)
+	call SetTeams(8)
+	call SetGamePlacement(MAP_PLACEMENT_TEAMS_TOGETHER)
+	call DefineStartLocation(0,  - 1792.0,  - 128.0)
+	call DefineStartLocation(1, 1792.0, 768.0)
+	call DefineStartLocation(2,  - 128.0,  - 704.0)
+	call DefineStartLocation(3,  - 2112.0,  - 1920.0)
+	call DefineStartLocation(4, 1152.0,  - 3136.0)
+	call DefineStartLocation(5, 960.0,  - 768.0)
+	call DefineStartLocation(6,  - 2688.0,  - 768.0)
+	call DefineStartLocation(7, 2176.0,  - 1536.0)
+	call InitCustomPlayerSlots()
+	call SetPlayerSlotAvailable(Player(0), MAP_CONTROL_USER)
+	call SetPlayerSlotAvailable(Player(1), MAP_CONTROL_USER)
+	call SetPlayerSlotAvailable(Player(2), MAP_CONTROL_USER)
+	call SetPlayerSlotAvailable(Player(3), MAP_CONTROL_USER)
+	call SetPlayerSlotAvailable(Player(4), MAP_CONTROL_USER)
+	call SetPlayerSlotAvailable(Player(5), MAP_CONTROL_USER)
+	call SetPlayerSlotAvailable(Player(6), MAP_CONTROL_USER)
+	call SetPlayerSlotAvailable(Player(7), MAP_CONTROL_USER)
+	call InitGenericPlayerSlots()
+	call InitAllyPriorities()
+endfunction
+

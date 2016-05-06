@@ -1,0 +1,48 @@
+package GameStartHandler
+import PlayerGlobals
+import MyPlayer
+import PlayerGameStateEnum
+import KeyboardEvents
+
+function gameLoadedCallback()
+	var iter = myPlayers.iterator()
+	
+	//init multiboard
+	
+	while iter.hasNext()
+		var myPlayer = iter.next()
+		myPlayer.state = PlayerGameState.GAME_START
+		
+		//testing
+		myPlayer.transitionToPlatforming()
+		
+		//init multiboard for player
+	iter.close()
+	
+	//poll for game settings
+	
+init
+	timer tGameLoaded = CreateTimer()
+	
+	tGameLoaded.start(.01, () -> gameLoadedCallback())
+	
+	for int pID = 0 to NUMBER_PLAYERS
+		if GetPlayerSlotState(Player(pID)) == PLAYER_SLOT_STATE_PLAYING
+			MyPlayer p = new MyPlayer(pID)
+			p.state = PlayerGameState.GAME_PRELOADING
+			myPlayers.add(p)
+			
+			//register player defeated / leave / disconnect events
+			trigger tPlayerExits = CreateTrigger()
+				..addAction(MyPlayer.onPlayerExit)
+				..registerPlayerEvent(Player(pID), EVENT_PLAYER_DEFEAT)
+				..registerPlayerEvent(Player(pID), EVENT_PLAYER_LEAVE)
+				
+				
+			
+			//register keyboard events
+			var kState = new PlayerKeyboardState(pID, p)
+			
+			//connect mazer
+			
+			//connect platformer

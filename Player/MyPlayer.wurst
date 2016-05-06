@@ -1,0 +1,108 @@
+package MyPlayer
+
+import PlayerGlobals
+import KeyboardEvents
+import LinkedList
+import PlayerGameStateEnum
+
+import initlater Team 
+import initlater MazerUnit
+import initlater PlatformerUnit
+
+public LinkedList<MyPlayer> myPlayers
+
+public function getPlayer(int pID) returns MyPlayer
+	var iter = myPlayers.iterator()
+	
+	while iter.hasNext()
+		var myPlayer = iter.next()
+		if myPlayer.pID == pID
+			return myPlayer
+	iter.close()
+	
+	return null
+	
+
+public class MyPlayer
+	player 	p
+	int 	pID
+	Team	team
+	
+	MazerUnit mazer
+	PlatformerUnit platformer
+	
+	PlayerGameState state
+	
+	static code onPlayerExit
+	
+	function transitionToPlatforming()
+		real x = GAME_START_X
+		real y = GAME_START_Y
+		
+		switch (state)
+			case PlayerGameState.GAME_START
+			case PlayerGameState.GAME_PRELOADING
+				x = GAME_START_X
+				y = GAME_START_Y
+			case PlayerGameState.MAZING
+				x = mazer.mazer.getX()
+				y = mazer.mazer.getY()
+				
+				mazer.hideAndStore()
+			case PlayerGameState.TRANSITIONING_TO_MINIGAME
+			case PlayerGameState.TRANSITIONING_FROM_MINIGAME
+			case PlayerGameState.PLATFORMING
+			case PlayerGameState.SELECTING_MODES
+			case PlayerGameState.FINISHED_MODES
+			default
+				return
+		
+		print("Starting platforming")
+		transitionToPlatforming(x, y)
+		
+		
+	function transitionToPlatforming(real x, real y)
+		platformer.StartPlatforming(x, y)
+		
+		state = PlayerGameState.PLATFORMING
+		
+	function transitionToMazing()
+		real x = platformer.platformer.getX()
+		real y = platformer.platformer.getY()
+		
+		platformer.StopPlatforming()
+		
+		mazer.unhideAndReturn(x, y)
+		
+		state = PlayerGameState.MAZING
+		
+	construct(int pID)
+		this.pID = pID
+		platformer = new PlatformerUnit(pID, this)
+		mazer = new MazerUnit(pID, this)
+		
+	ondestroy
+		destroy mazer
+		destroy platformer
+		
+		//remove player from team, destroying team if that was the last player
+		
+		p = null
+		mazer = null
+		platformer = null
+		team = null		
+
+function onPlayerExit()
+	player p = GetTriggerPlayer()
+	MyPlayer myPlayer = getPlayer(p.getId())
+	
+	if myPlayer != null
+		//TODO update multiboard
+		
+		destroy myPlayer
+		
+
+init
+	myPlayers = new LinkedList<MyPlayer>()
+	MyPlayer.onPlayerExit = () -> onPlayerExit()
+			

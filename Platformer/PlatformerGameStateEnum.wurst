@@ -1,0 +1,6 @@
+package PlatformerGameStateEnum
+
+public enum PlatformerGameState
+	DEFAULT
+	BOSS
+	MINIGAME

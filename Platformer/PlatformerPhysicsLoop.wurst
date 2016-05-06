@@ -1,0 +1,49 @@
+package PlatformerPhysicsLoop
+import PlatformerGlobals
+import initlater PlatformerDiagonalEnum
+
+import LinkedList
+import Vectors
+
+import initlater TerrainHelpers
+import initlater PlatformerUnitGroup
+import initlater PlatformerUnit
+
+public timer physicsLoopTimer
+
+
+public function UpdatePhysics(PlatformerUnit platformer)
+	vec3 curPosition = platformer.position
+	
+	if platformer.onDiagonal != PlatformerDiagonal.NONE
+		//do nothing
+		
+	else
+		platformer.position = platformer.position 
+		+ platformer.velocity
+		+ (platformer.acceleration * .5 * PHYSICS_LOOP_TIMER_INTERVAL)
+		
+		//check if position passes through unpathable block or diagonal
+		
+		
+		platformer.velocity = platformer.velocity + (platformer.acceleration * PHYSICS_LOOP_TIMER_INTERVAL)
+		
+		//if current acceleration in the direction of the gravity vector is > terminal velocity, do not apply gravity
+		platformer.acceleration = platformer.acceleration + platformer.gravityAcceleration
+		
+		
+	
+
+public function PhysicsLoop()
+	var iter = getPlatformingUnits().iterator()
+	
+	for platformingUnit from iter
+		UpdatePhysics(platformingUnit)
+	iter.close()
+	
+
+	
+init
+	physicsLoopTimer = CreateTimer()
+	
+endpackage

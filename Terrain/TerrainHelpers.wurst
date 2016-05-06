@@ -1,0 +1,35 @@
+package TerrainHelpers
+import PlatformerTerrainLogicMainLoop
+
+public class TerrainCenterPoint
+	int x
+	int y
+		
+	private int terrainID
+		
+	construct(int x, int y)
+		this.x = x
+		this.y = y
+	
+	function getTerrainID() returns int
+		if terrainID == -1
+			terrainID = GetTerrainType(x.toReal(), y.toReal())
+		return terrainID
+		
+
+public function getTerrainCenter(real x, real y) returns TerrainCenterPoint
+	int terrainCenterX
+	int terrainCenterY
+
+	//get the center coordinates for the tile containing (x,y)
+	if x >= 0
+		terrainCenterX = R2I(x / 128 + .50000) * 128
+	else
+		terrainCenterX = R2I(x / 128 - .50000) * 128
+	
+	if y >= 0
+		terrainCenterY = R2I(y / 128 + .50000) * 128
+	else
+		terrainCenterY = R2I(y / 128 - .50000) * 128
+		
+	return new TerrainCenterPoint(terrainCenterX, terrainCenterY)

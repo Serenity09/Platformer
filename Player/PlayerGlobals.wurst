@@ -1,0 +1,6 @@
+package PlayerGlobals
+
+
+@configurable public constant int NUMBER_PLAYERS = 8
+@configurable public constant real GAME_START_X = 2500
+@configurable public constant real GAME_START_Y = -3000
