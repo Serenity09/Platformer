@@ -25,4 +25,4 @@ public function isTerrainPlatformerDiagonalType(int terrainID) returns bool
 public function isTerrainPlatformerUnpathable(real x, real y) returns bool
 	return isTerrainPlatformerUnpathable(GetTerrainType(x, y))
 public function isTerrainPlatformerUnpathable(int terrainID) returns bool
-	return terrainID == SAFE or terrainID == SUPERJUMP or terrainID == FASTMOVE or isTerrainPlatformerDiagonalType(terrainID)
+	return terrainID == SAFE or terrainID == ROCKS or terrainID == SUPERJUMP or terrainID == FASTMOVE or isTerrainPlatformerDiagonalType(terrainID)
