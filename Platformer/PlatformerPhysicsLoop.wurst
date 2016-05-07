@@ -13,25 +13,41 @@ public timer physicsLoopTimer
 
 
 public function UpdatePhysics(PlatformerUnit platformer)
-	vec3 curPosition = platformer.position
+	vec2 curPosition = platformer.position
+	
+	platformer.position = platformer.position 
+	+ platformer.velocity * PHYSICS_LOOP_TIMER_INTERVAL
+	+ (platformer.acceleration * .5 * PHYSICS_LOOP_TIMER_INTERVAL * PHYSICS_LOOP_TIMER_INTERVAL)
+	
+	platformer.velocity = platformer.velocity + (platformer.acceleration * PHYSICS_LOOP_TIMER_INTERVAL)
+	
+	//if current acceleration in the direction of the gravity vector is > terminal velocity, do not apply gravity
+	//platformer.gravityAcceleration should already have PHYSICS_LOOP_TIMER_INTERVAL factored in
+	platformer.acceleration = platformer.acceleration + platformer.gravityAcceleration
 	
 	if platformer.onDiagonal != PlatformerDiagonal.NONE
 		//do nothing
-		
+		switch platformer.onDiagonal
+			case PlatformerDiagonal.TOP
+			default
+				platformer.velocity = vec2(0, 0)
 	else
-		platformer.position = platformer.position 
-		+ platformer.velocity
-		+ (platformer.acceleration * .5 * PHYSICS_LOOP_TIMER_INTERVAL)
-		
-		//check if position passes through unpathable block or diagonal
 		
 		
-		platformer.velocity = platformer.velocity + (platformer.acceleration * PHYSICS_LOOP_TIMER_INTERVAL)
+		//print(platformer.acceleration.toString())
+		//print(platformer.gravityAcceleration.toString())
 		
-		//if current acceleration in the direction of the gravity vector is > terminal velocity, do not apply gravity
-		platformer.acceleration = platformer.acceleration + platformer.gravityAcceleration
-		
-		
+	//TODO handle pathing and all that good stuff
+	vec2 path = platformer.position - curPosition
+	real pathLength = path.length()
+	if pathLength >= 32
+		//iterate path looking for terrain types
+	
+	//either way check the end of the path
+	
+	
+	
+	//platformer.platformer.setXY(platformer.position.x, platformer.position.y)
 	
 
 public function PhysicsLoop()

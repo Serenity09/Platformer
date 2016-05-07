@@ -1,3 +1,4 @@
 package JASSGlobals
 
-
+public constant real SIN_45 = .707100000
+public constant real COS_45 = SIN_45

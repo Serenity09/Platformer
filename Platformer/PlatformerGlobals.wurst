@@ -1,14 +1,28 @@
 package PlatformerGlobals
 
+public constant real PLATFORMING_WALL_BUFFER = 30
+
+public constant int PLATFORMING_UNIT_ID = 'e000'
+
+public constant real PHYSICS_LOOP_TIMER_INTERVAL = .035
+public constant real TERMINAL_SPEED = 100.0
+public constant real GRAVITY_ACCELERATION = -45
+public constant real VERTICAL_JUMP_SPEED = 300.0
+public constant real HORIZONTAL_JUMP_SPEED = 200.0
+public constant real V2H_JUMP_RATIO = .6
+
+/*
 @configurable public constant real PLATFORMING_WALL_BUFFER = 30
 
 @configurable public constant int PLATFORMING_UNIT_ID = 'e000'
 
 @configurable public constant real PHYSICS_LOOP_TIMER_INTERVAL = .035
 @configurable public constant real TERMINAL_SPEED = 100.0
-@configurable public constant real GRAVITY_ACCELERATION = -1.5
-@configurable public constant real VERTICAL_JUMP_SPEED = 30.0
-@configurable public constant real HORIZONTAL_JUMP_SPEED = 20.0
+@configurable public constant real GRAVITY_ACCELERATION = -45
+@configurable public constant real VERTICAL_JUMP_SPEED = 300.0
+@configurable public constant real HORIZONTAL_JUMP_SPEED = 200.0
 @configurable public constant real V2H_JUMP_RATIO = .6
+*/
+
 
 //@configurable public constant int OPENSPACE = 'cOc1'

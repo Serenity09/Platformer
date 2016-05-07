@@ -20,9 +20,9 @@ public class PlatformerUnit
 	MyPlayer	myPlayer
 	camerasetup	camera
 	
-	vec3		position
-	vec3		velocity
-	vec3		acceleration		//is a function of the timer timestep
+	vec2		position
+	vec2		velocity
+	vec2		acceleration		//is a function of the timer timestep
 	int			currentTerrainID
 	int			lastTerrainID
 	int			pushedAgainstTerrainID
@@ -62,6 +62,8 @@ public class PlatformerUnit
 			platformer.setY(y)
 			platformer.show()
 			
+			position = vec2(x, y)
+			
 			//start platforming camera
 			if GetLocalPlayer() == Player(pID)
 				CameraSetupApply(camera, false, false)
@@ -93,21 +95,24 @@ public class PlatformerUnit
 		//apply values regardless of game state
 		var x = platformer.getX()
 		var y = platformer.getY()
-		position = vec3(platformer.getX(), platformer.getY(), 0)
-		velocity = vec3(0, 0, 0)
-		acceleration = vec3(0, 0, 0)
 		onDiagonal = PlatformerDiagonal.NONE
 		
 		switch (gameState)
-		
 			case PlatformerGameState.DEFAULT
-			default
+				velocity = vec2(0, 0)
+				acceleration = vec2(0, 0)
+				
 				terminalSpeed = TERMINAL_SPEED * PHYSICS_LOOP_TIMER_INTERVAL
+				print("setting gravity accel: " + (GRAVITY_ACCELERATION * PHYSICS_LOOP_TIMER_INTERVAL).toString())
 				gravityAcceleration = vec2(0, GRAVITY_ACCELERATION * PHYSICS_LOOP_TIMER_INTERVAL)
 				verticalJumpSpeed = VERTICAL_JUMP_SPEED * PHYSICS_LOOP_TIMER_INTERVAL
 				horizontalJumpSpeed = HORIZONTAL_JUMP_SPEED * PHYSICS_LOOP_TIMER_INTERVAL
 				v2hJumpRatio = V2H_JUMP_RATIO * PHYSICS_LOOP_TIMER_INTERVAL
+			default
+				print("shouldn't be here")
 				
+		//print(gravityAcceleration.toString())
+			
 	construct(int pID, MyPlayer myPlayer)
 		this.pID = pID
 		this.myPlayer = myPlayer

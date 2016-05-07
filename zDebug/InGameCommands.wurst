@@ -51,6 +51,7 @@ public function onCheckDiagonals()
 	if nextDiag != onDiagonal
 		onDiagonal = nextDiag
 		print(onDiagonal.toString())
+		print(onDiagonal.getDiagonalOrthogonalInto().toString())
 
 
 init

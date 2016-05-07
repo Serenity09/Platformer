@@ -9,16 +9,20 @@ import MyPlayer
 public function isTerrainPlatformerPathable(real x, real y) returns bool
 	return isTerrainPlatformerPathable(GetTerrainType(x, y))
 public function isTerrainPlatformerPathable(int terrainID) returns bool
-	return terrainID == OPENSPACE or terrainID == DEATH or terrainID == SUPERBOUNCE or terrainID == SLIPSTREAM or terrainID == SLOWWEB or terrainID == OCEAN or isTerrainPlatformerDiagonalType(terrainID)
+	return terrainID == OPENSPACE or terrainID == DEATH or terrainID == PLATFORMING or terrainID == SUPERBOUNCE or terrainID == SLIPSTREAM or terrainID == SLOWWEB or terrainID == OCEAN //or isTerrainPlatformerDiagonalType(terrainID)
+	//NOTE: PAY ATTENTION TO BELOW:
+	//checking the inverse is faster for now... should still keep the above updated for clarity
+	//return not isTerrainPlatformerUnpathable(terrainID)
 
 //a special subset of pathable terrain types
+//POINT IN DIAGONAL SPECIFICALLY DOES NOT WORK UNLESS DIAGONAL TYPES ARE UNPATHABLE... OOPS
 public function isTerrainPlatformerDiagonalType(real x, real y) returns bool
 	return isTerrainPlatformerDiagonalType(GetTerrainType(x, y))
 public function isTerrainPlatformerDiagonalType(int terrainID) returns bool
-	return terrainID == FASTICE or terrainID == MEDIUMICE or terrainID == SLOWICE
+	return terrainID == FASTICE or terrainID == SLOWICE or terrainID == GRASS or terrainID == D_GRASS
 
 //filter for if a platformer can't move through a terrain type
 public function isTerrainPlatformerUnpathable(real x, real y) returns bool
 	return isTerrainPlatformerUnpathable(GetTerrainType(x, y))
 public function isTerrainPlatformerUnpathable(int terrainID) returns bool
-	return terrainID == SAFE or terrainID == GRASS or terrainID == D_GRASS or terrainID == SUPERJUMP or terrainID == FASTMOVE
+	return terrainID == SAFE or terrainID == SUPERJUMP or terrainID == FASTMOVE or isTerrainPlatformerDiagonalType(terrainID)
